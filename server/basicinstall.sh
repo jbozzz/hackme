@@ -49,6 +49,8 @@ cd
 wget $baseurl/hackme.war
 sudo rm -r /var/lib/tomcat7/webapps/ROOT
 sudo mv hackme.war /var/lib/tomcat7/webapps/ROOT.war 
+wget $baseurl/index.html
+sudo mv index.html /var/www/
 
 #Install IDS
 cd
