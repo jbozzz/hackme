@@ -1,0 +1,21 @@
+# Copyright 2001-2005 Sourcefire, Inc. All Rights Reserved
+#
+#----------
+# SQL INJECTION RULES
+#----------
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"Possible SQL Injection attempt"; flow:to_server,established;uricontent:".jsp";pcre:"/(\%27)|(\')|(\-\-)|(%23)|(#)/i"; classtype:Web-application-attack; sid:1000000; rev:5;) 
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"SQL Injection attempt"; flow:to_server,established;uricontent:".jsp";pcre:"/\w*((\%27)|(\'))((\%6F)|o|(\%4F))((\%72)|r|(\%52))/ix"; classtype:Web-application-attack; sid:1000001; rev:5;)
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"Possible SQL Injection attempt"; flow:to_server,established;uricontent:".jsp";pcre:"/(\%27)|(\')|(\-\-)|(%23)|(#)/i"; classtype:Web-application-attack; sid:1000002; rev:5;)
+
+#----------
+# XSS INJECTION RULES
+#----------
+alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"Cross-site scripting attempt"; flow:to_server,established; pcre:"/((\%3C)|<)((\%2F)|\/)*[a-z0-9\%]+((\%3E)|>)/i"; classtype:Web-application-attack; sid:1000004; rev:5;) 
+alert tcp $EXTERNAL_NET any -> $HTTP_SERVERS $HTTP_PORTS (msg:"Possible Cross-site scripting attempt"; flow:to_server,established; pcre:"/((\%3C)|<)[^\n]+((\%3E)|>)/I"; classtype:Web-application-attack; sid:1000005; rev:5;)
+
+#----------
+# DETECTION OF COMPROMISED SERVER
+#----------
+alert tcp $EXTERNAL_NET any -> any any (msg:"Server is compromised, root password detected"; flow:to_server;pcre:"rootpassword"; classtype:successful-admin; sid:1000006; rev:5;sd_pattern: 1,rootpassword;) 
+
